@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { TaskService } from 'src/app/services/task.service';
-import { Task } from 'src/app/Task';
+import { Task } from '../../Task';
+import { addTask, requestGetTasks } from 'src/app/store/actions/task.actions';
+import { taskSelector } from '../../store/selectors/task.selector';
 
 @Component({
   selector: 'app-tasks',
@@ -8,18 +12,20 @@ import { Task } from 'src/app/Task';
   styleUrls: ['./tasks.component.css'],
 })
 export class TasksComponent implements OnInit {
-  tasks: Task[] = [];
-  constructor(private taskService: TaskService) {}
+  tasks$: Observable<Task[]> | undefined | any;
+  constructor(private taskService: TaskService, private store: Store) {}
 
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe((tasks) => (this.tasks = tasks));
+    // this.taskService.getTasks().subscribe((tasks) => (this.tasks = tasks));
+    this.store.dispatch(requestGetTasks());
+    this.tasks$ = this.store.select(taskSelector);
   }
 
   deleteTask = (task: Task | undefined) => {
     this.taskService
       .deleteTask(task)
       .subscribe(
-        () => (this.tasks = this.tasks.filter((t) => t.id !== task?.id))
+        () => (this.tasks$ = this.tasks$.filter((t: any) => t.id !== task?.id))
       );
   };
 
@@ -29,6 +35,7 @@ export class TasksComponent implements OnInit {
   };
 
   addTask = (task: any) => {
-    this.taskService.addTask(task).subscribe((task) => this.tasks.push(task));
+    this.store.dispatch(addTask(task));
+    this.taskService.addTask(task).subscribe((task) => this.tasks$.push(task));
   };
 }

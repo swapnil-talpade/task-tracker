@@ -13,6 +13,10 @@ import { TaskItemComponent } from './components/task-item/task-item.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { StoreModule } from '@ngrx/store';
+import { taskReducer } from './store/reducers/task.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { TaskEffects } from './store/effects/task.effects';
 
 const appRoutes: Routes = [
   {
@@ -41,7 +45,9 @@ const appRoutes: Routes = [
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
+    StoreModule.forRoot({ tasks: taskReducer }),
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    EffectsModule.forRoot([TaskEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],
