@@ -8,8 +8,14 @@
     },
     {
       "text": "TalpadeSwapnil",
-      "day": "helol",
       "reminder": true,
+      "day": "helol",
+      "id": 3
+    },
+    {
+      "text": "no",
+      "reminder": true,
+      "day": "yes",
       "id": 4
     }
   ]

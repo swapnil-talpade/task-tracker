@@ -3,7 +3,11 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { TaskService } from 'src/app/services/task.service';
 import { Task } from '../../Task';
-import { addTask, requestGetTasks } from 'src/app/store/actions/task.actions';
+import {
+  addTask,
+  requestAddTask,
+  requestGetTasks,
+} from 'src/app/store/actions/task.actions';
 import { taskSelector } from '../../store/selectors/task.selector';
 
 @Component({
@@ -35,7 +39,10 @@ export class TasksComponent implements OnInit {
   };
 
   addTask = (task: any) => {
-    this.store.dispatch(addTask(task));
-    this.taskService.addTask(task).subscribe((task) => this.tasks$.push(task));
+    console.log(task);
+    this.store.dispatch(requestAddTask(task));
+    this.store.dispatch(requestGetTasks());
+    // this.tasks$ = this.store.select(taskSelector);
+    // this.taskService.addTask(task).subscribe((task) => this.tasks$.push(task));
   };
 }
