@@ -7,6 +7,10 @@ import {
   addTask,
   getTasks,
   requestGetTasks,
+  requestDeleteTask,
+  deleteTask,
+  requestToggleReminder,
+  toggleReminder,
 } from '../actions/task.actions';
 import { Task } from 'src/app/Task';
 
@@ -19,8 +23,6 @@ export class TaskEffects {
       switchMap((action) => {
         return this.taskService.getTasks().pipe(
           map((data) => {
-            console.log(`below is `);
-            console.log(data);
             return getTasks({ tasks: data });
           })
         );
@@ -31,20 +33,40 @@ export class TaskEffects {
   addTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(requestAddTask),
-      switchMap((action: any) => {
-        // console.log(`before`);
-        // console.log(action.text);
-        // console.log(action.type);
-        const task: Task = {
-          text: action.text,
-          reminder: action.reminder,
-          day: action.day,
-        };
-        return this.taskService.addTask(task).pipe(
+      switchMap((action) => {
+        return this.taskService.addTask(action.task).pipe(
           map((data: any) => {
+            return addTask({ task: data });
+          })
+        );
+      })
+    )
+  );
+
+  deleteTask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(requestDeleteTask),
+      switchMap((action) => {
+        return this.taskService.deleteTask(action.task).pipe(
+          map((data) => {
+            return deleteTask();
+          })
+        );
+      })
+    )
+  );
+
+  toggleReminder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(requestToggleReminder),
+      switchMap((action) => {
+        console.log('action');
+        console.log(action.task);
+        return this.taskService.updateTaskReminder(action.task).pipe(
+          map((data) => {
             console.log(`below is data`);
             console.log(data);
-            return addTask({ task: data });
+            return toggleReminder();
           })
         );
       })

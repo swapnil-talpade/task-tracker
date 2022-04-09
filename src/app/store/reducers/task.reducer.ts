@@ -2,9 +2,13 @@ import { createReducer, on, State } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
   addTask,
+  deleteTask,
   getTasks,
   requestAddTask,
+  requestDeleteTask,
   requestGetTasks,
+  requestToggleReminder,
+  toggleReminder,
 } from '../actions/task.actions';
 import { Task } from '../../Task';
 import { TaskService } from 'src/app/services/task.service';
@@ -28,5 +32,19 @@ export const taskReducer = createReducer(
   }),
   on(addTask, (state, action) => {
     return [...state, action.task];
+  }),
+  on(requestDeleteTask, (state, action) => {
+    console.log(action);
+    return [...state];
+  }),
+  on(deleteTask, (state) => {
+    return [...state];
+  }),
+  on(requestToggleReminder, (state) => {
+    console.log(`called`);
+    return [...state];
+  }),
+  on(toggleReminder, (state) => {
+    return [...state];
   })
 );

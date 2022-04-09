@@ -17,7 +17,8 @@ export const requestDeleteTask = createAction(
   props<{ task: Task }>()
 );
 export const deleteTask = createAction('[Tasks] deleteTask');
-// export const addTaskSuccess = createAction(
-//   '[Tasks] addTaskSuccess',
-//   (task: Task) => task //can also use this
-// );
+export const requestToggleReminder = createAction(
+  '[Tasks] requestToggleReminder',
+  props<{ task: Task }>()
+);
+export const toggleReminder = createAction('[Tasks] toggleReminder');

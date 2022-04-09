@@ -6,7 +6,9 @@ import { Task } from '../../Task';
 import {
   addTask,
   requestAddTask,
+  requestDeleteTask,
   requestGetTasks,
+  requestToggleReminder,
 } from 'src/app/store/actions/task.actions';
 import { taskSelector } from '../../store/selectors/task.selector';
 
@@ -25,22 +27,32 @@ export class TasksComponent implements OnInit {
     this.tasks$ = this.store.select(taskSelector);
   }
 
-  deleteTask = (task: Task | undefined) => {
-    this.taskService
-      .deleteTask(task)
-      .subscribe(
-        () => (this.tasks$ = this.tasks$.filter((t: any) => t.id !== task?.id))
-      );
+  deleteTask = (task: any) => {
+    this.store.dispatch(requestDeleteTask({ task }));
+    this.store.dispatch(requestGetTasks());
   };
 
   toggleReminder = (task: Task) => {
-    task.reminder = !task.reminder;
-    this.taskService.updateTaskReminder(task).subscribe();
+    // task.reminder = !task.reminder;
+    console.log(task);
+    const updatedTask: Task = { ...task };
+    updatedTask.reminder = !updatedTask.reminder;
+    console.log(updatedTask);
+    // console.log(task);
+    // const updatedTask: Task = {
+    //   ...task,
+    //   reminder: !task.reminder,
+    // };
+    // console.log(updatedTask);
+    // console.log(`getting triggered`);
+    this.store.dispatch(requestToggleReminder({ task: updatedTask }));
+    this.store.dispatch(requestGetTasks());
+    // this.taskService.updateTaskReminder(task).subscribe();
   };
 
   addTask = (task: any) => {
     console.log(task);
-    this.store.dispatch(requestAddTask(task));
+    this.store.dispatch(requestAddTask({ task }));
     this.store.dispatch(requestGetTasks());
     // this.tasks$ = this.store.select(taskSelector);
     // this.taskService.addTask(task).subscribe((task) => this.tasks$.push(task));
