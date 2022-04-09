@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { catchError, delay, exhaustMap, map, of, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { TaskService } from 'src/app/services/task.service';
 import {
   requestAddTask,
@@ -12,7 +12,6 @@ import {
   requestToggleReminder,
   toggleReminder,
 } from '../actions/task.actions';
-import { Task } from 'src/app/Task';
 
 @Injectable()
 export class TaskEffects {
@@ -60,12 +59,8 @@ export class TaskEffects {
     this.actions$.pipe(
       ofType(requestToggleReminder),
       switchMap((action) => {
-        console.log('action');
-        console.log(action.task);
         return this.taskService.updateTaskReminder(action.task).pipe(
           map((data) => {
-            console.log(`below is data`);
-            console.log(data);
             return toggleReminder();
           })
         );

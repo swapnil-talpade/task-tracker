@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { TaskService } from 'src/app/services/task.service';
 import { Task } from '../../Task';
 
 export const requestGetTasks = createAction('[Tasks] requestGetTasks');
